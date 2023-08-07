@@ -6,9 +6,12 @@
 #include "Enemy.h"
 #include "Audio/AudioSystem.h"
 #include "Framework/Scene.h"
+#include "Framework/Resource/ResourceManager.h"
 #include "Renderer/Font.h"
 #include "Renderer/Text.h"
 #include "Renderer/ParticleSystem.h"
+#include "Core/Logger.h"
+#include "Renderer/Texture.h"
 
 #include "StarField.h"
 
@@ -17,6 +20,9 @@
 #include <vector>
 #include <thread>
 #include <memory>
+#include <cassert>
+#include <array>
+#include <map>
 
 using namespace std;
 
@@ -41,12 +47,18 @@ public:
 
 int main(int argc, char* argv[])
 {
+	//int j = 0;
+	//ASSERT_LOG(j, "pointer is null");
+
+	INFO_LOG("Hello world");
+
 	kiko::MemoryTracker::Initialize();
 
 	bool quit = false;
 	kiko::seedRandom((unsigned int)time(nullptr));
 	kiko::setFilePath("Assets");
-	cout << kiko::getFilePath() << endl;
+
+	//cout << kiko::getFilePath() << endl;
 
 
 
@@ -80,6 +92,10 @@ int main(int argc, char* argv[])
 	float speed = 200;
 	constexpr float turnRate = kiko::DegreesToRadians(180);
 
+	// create texture
+	//-------------------------------------------------------------------------------------------------------------
+	kiko::res_t<kiko::Texture> texture = kiko::g_resources.Get<kiko::Texture>("Shipss.png", kiko::g_renderer);
+
 	while (!quit)
 	{
 		// engine update
@@ -96,18 +112,6 @@ int main(int argc, char* argv[])
 
 		// game update
 		game->Update(kiko::g_time.GetDeltaTime());
-
-		/*if (kiko::g_inputSystem.GetMouseButtonDown(0) || kiko::g_inputSystem.GetMouseButtonDown(1) || kiko::g_inputSystem.GetMouseButtonDown(2))
-		{
-			cout << "Mouse Button Pressed" << endl;
-			cout << kiko::g_inputSystem.GetMousePosition().x << endl;
-			cout << kiko::g_inputSystem.GetMousePosition().y << endl;
-		}*/
-
-		//if (kiko::g_inputSystem.GetKeyDown(SDL_SCANCODE_SPACE))
-		//{
-		//	kiko::g_audioSystem.PlayOneShot("Laser");
-		//}
 			kiko::g_audioSystem.PlayOneShot("Sound", true);
 
 
@@ -124,7 +128,7 @@ int main(int argc, char* argv[])
 		}
 
 		game->Draw(kiko::g_renderer);
-
+		kiko::g_renderer.DrawTexture(texture.get(), 200.0f, 200.0f, 0.0f);
 		//text->Draw(kiko::g_renderer, 400, 300);
 
 		kiko::g_renderer.EndFrame();

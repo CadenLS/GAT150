@@ -83,27 +83,27 @@ void Player::Update(float dt)
 			if (kiko::g_inputSystem.GetKeyDown(SDL_SCANCODE_SPACE) && !kiko::g_inputSystem.GetPreviousKeyDown(SDL_SCANCODE_SPACE))
 			{
 				kiko::g_audioSystem.PlayOneShot("Laser");
-				kiko::Transform transform1{ m_transform.position, m_transform.rotation + kiko::DegreesToRadians(kiko::random(20.0f)), 0.5f };
+				kiko::Transform transform1{ m_transform.position, m_transform.rotation + kiko::DegreesToRadians(kiko::randomf(20.0f)), 0.5f };
 				std::unique_ptr<Weapon> weapon = std::make_unique<Weapon>(400.0f, transform1, m_model);
 				weapon->m_tag = "PlayerBullet";
 				m_scene->Add(std::move(weapon));
 
-				kiko::Transform transform2{ m_transform.position, m_transform.rotation - kiko::DegreesToRadians(kiko::random(20.0f)), 0.5f };
+				kiko::Transform transform2{ m_transform.position, m_transform.rotation - kiko::DegreesToRadians(kiko::randomf(20.0f)), 0.5f };
 				weapon = std::make_unique<Weapon>(400.0f, transform2, m_model);
 				weapon->m_tag = "PlayerBullet";
 				m_scene->Add(std::move(weapon));
 
-				kiko::Transform transform3{ m_transform.position, m_transform.rotation + kiko::DegreesToRadians(kiko::random(20.0f)), 0.5f };
+				kiko::Transform transform3{ m_transform.position, m_transform.rotation + kiko::DegreesToRadians(kiko::randomf(20.0f)), 0.5f };
 				weapon = std::make_unique<Weapon>(400.0f, transform3, m_model);
 				weapon->m_tag = "PlayerBullet";
 				m_scene->Add(std::move(weapon));
 
-				kiko::Transform transform4{ m_transform.position, m_transform.rotation - kiko::DegreesToRadians(kiko::random(20.0f)), 0.5f };
+				kiko::Transform transform4{ m_transform.position, m_transform.rotation - kiko::DegreesToRadians(kiko::randomf(20.0f)), 0.5f };
 				weapon = std::make_unique<Weapon>(400.0f, transform4, m_model);
 				weapon->m_tag = "PlayerBullet";
 				m_scene->Add(std::move(weapon));
 
-				kiko::Transform transform5{ m_transform.position, m_transform.rotation - kiko::DegreesToRadians(kiko::random(20.0f)), 0.5f };
+				kiko::Transform transform5{ m_transform.position, m_transform.rotation - kiko::DegreesToRadians(kiko::randomf(20.0f)), 0.5f };
 				weapon = std::make_unique<Weapon>(400.0f, transform5, m_model);
 				weapon->m_tag = "PlayerBullet";
 				m_scene->Add(std::move(weapon));

@@ -4,6 +4,7 @@
 #include "FileIO.h"
 #include "Memory.h"
 #include "Time.h"
+#include "Logger.h"
 
 // math
 #include "Color.h"
