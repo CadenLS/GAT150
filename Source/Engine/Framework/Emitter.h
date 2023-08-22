@@ -1,6 +1,6 @@
 #pragma once
 #include "Actor.h"
-#include "Core/Color.h"
+#include "Core/Math/Color.h"
 #include "Core/Core.h"
 #include "Renderer/ParticleSystem.h"
 

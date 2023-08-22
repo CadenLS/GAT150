@@ -1,15 +1,18 @@
 #pragma once
+#include "Framework/Object.h"
 
 namespace kiko
 {
-	class Component
+	///                    vvvvvv
+	class Component : public Object
 	{
 	public:
 		virtual void Update(float dt) = 0;
 
 		friend class Actor;
 
-	protected:
+	///made public
+	public:
 		class Actor* m_owner = nullptr;
 	};
 }

@@ -1,6 +1,6 @@
 #pragma once
-#include "Core/Color.h"
-#include "Core/vector2.h"
+#include "Core/Math/Color.h"
+#include "Core/Math/vector2.h"
 
 namespace kiko
 {

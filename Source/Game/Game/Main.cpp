@@ -1,17 +1,17 @@
 #include "Core/Core.h"
 #include "Renderer/Renderer.h"
-#include "Renderer/ModelManager.h"
 #include "Input/InputSystem.h"
 #include "Player.h"
 #include "Enemy.h"
 #include "Audio/AudioSystem.h"
-#include "Framework/Scene.h"
-#include "Framework/Resource/ResourceManager.h"
 #include "Renderer/Font.h"
 #include "Renderer/Text.h"
 #include "Renderer/ParticleSystem.h"
 #include "Core/Logger.h"
 #include "Renderer/Texture.h"
+#include "Framework/Framework.h"
+#include "Physics/PhysicsSystem.h"
+
 
 #include "StarField.h"
 
@@ -47,19 +47,13 @@ public:
 
 int main(int argc, char* argv[])
 {
-	//int j = 0;
-	//ASSERT_LOG(j, "pointer is null");
-
-	INFO_LOG("Hello world");
+	INFO_LOG("Initialize Engine...");
 
 	kiko::MemoryTracker::Initialize();
 
 	bool quit = false;
 	kiko::seedRandom((unsigned int)time(nullptr));
 	kiko::setFilePath("Assets");
-
-	//cout << kiko::getFilePath() << endl;
-
 
 
 	kiko::Renderer renderer;
@@ -68,6 +62,7 @@ int main(int argc, char* argv[])
 
 	kiko::g_audioSystem.Initialize();
 	kiko::g_inputSystem.Initialize();
+	kiko::PhysicsSystem::Instance().Initialize();
 
 	// Create Game
 	unique_ptr<StarField> game = make_unique<StarField>();
@@ -94,7 +89,9 @@ int main(int argc, char* argv[])
 
 	// create texture
 	//-------------------------------------------------------------------------------------------------------------
-	kiko::res_t<kiko::Texture> texture = kiko::g_resources.Get<kiko::Texture>("Shipss.png", kiko::g_renderer);
+	//kiko::res_t<kiko::Texture> texture = kiko::g_resources.Get<kiko::Texture>("Shipss.png", kiko::g_renderer);
+
+
 
 	while (!quit)
 	{
@@ -112,8 +109,9 @@ int main(int argc, char* argv[])
 
 		// game update
 		game->Update(kiko::g_time.GetDeltaTime());
-			kiko::g_audioSystem.PlayOneShot("Sound", true);
+		kiko::g_audioSystem.PlayOneShot("Sound", true);
 
+		game->Draw(kiko::g_renderer);
 
 		// draw game
 		for (auto& star : stars)
@@ -127,8 +125,7 @@ int main(int argc, char* argv[])
 			kiko::g_renderer.DrawPoint(star.m_pos.x, star.m_pos.y);
 		}
 
-		game->Draw(kiko::g_renderer);
-		kiko::g_renderer.DrawTexture(texture.get(), 200.0f, 200.0f, 0.0f);
+		//kiko::g_renderer.DrawTexture(texture.get(), 200.0f, 200.0f, 0.0f);
 		//text->Draw(kiko::g_renderer, 400, 300);
 
 		kiko::g_renderer.EndFrame();

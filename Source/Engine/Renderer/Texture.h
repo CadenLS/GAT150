@@ -1,12 +1,12 @@
 #pragma once
-#include "Core/Vector2.h"
+#include "Core/Math/Vector2.h"
 #include "Framework/Resource/Resource.h"
 
 struct SDL_Texture;
 
 namespace kiko
 {
-	class Texture : Resource
+	class Texture : public Resource
 	{
 	public:
 		Texture() = default;
