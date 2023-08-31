@@ -13,7 +13,7 @@
 bool StarField::Initialize()
 {
 	//m_font = kiko::g_resources.Get<kiko::Font>("QuirkyRobot.ttf", 24);
-	m_font = GET_RESOURCE(kiko::Font, "QuirkyRobot.ttf", 24);
+	//m_font = GET_RESOURCE(kiko::Font, "QuirkyRobot.ttf", 24);
 
 	m_scoreText = std::make_unique<kiko::Text>(m_font);
 	m_scoreText->Create(kiko::g_renderer, "SCORE 0000", kiko::Color{ 1, 0, 1, 1 });
@@ -43,10 +43,17 @@ bool StarField::Initialize()
 
 	// create scene
 	m_scene = std::make_unique<kiko::Scene>();
-	m_scene->Load("scene.json");
-	m_scene->GetActorByName("Title")->active = true;
+	m_scene->Load("scene/spaceScene.json");
+	//m_scene->GetActorByName("Title")->active = true;
 	//m_scene->GetActorByName("Title")->active = false;
 	m_scene->Initialize();
+
+	// add events
+	EVENT_SUBSCRIBE("AddPoints", StarField::OnAddPoints);
+	EVENT_SUBSCRIBE("OnPlayerDead", StarField::OnPlayerDead);
+	//Should replace these vvvvv
+	//kiko::EventManager::Instance().Subscribe("AddPoints", this, std::bind(&StarField::OnAddPoints, this, std::placeholders::_1));
+	//kiko::EventManager::Instance().Subscribe("OnPlayerDead", this, std::bind(&StarField::OnPlayerDead, this, std::placeholders::_1));
 
 	return true;
 }
@@ -74,28 +81,32 @@ void StarField::Update(float dt)
 	case StarField::eState::StartLevel:
 		m_scene->RemoveAll(dt);
 	{
-			//Create Player
-			m_scene->RemoveAll(dt);
-			auto player = std::make_unique<kiko::Player>(10.0f, kiko::Pi, kiko::Transform{ {400, 300}, 0, 1 });
-			player->tag = "Player";
-			player->m_game = this;
+			////Create Player
+			//m_scene->RemoveAll(dt);
+			//auto player = std::make_unique<kiko::Player>(10.0f, kiko::Pi, kiko::Transform{ {400, 300}, 0, 1 });
+			//player->tag = "Player";
+			//player->m_game = this;
 
-			//create Components
-			auto renderComponent = CREATE_CLASS(SpriteComponent)
-			renderComponent->m_texture = GET_RESOURCE(kiko::Texture, "Shipss.png", kiko::g_renderer);
-			player->AddComponent(std::move(renderComponent));
+			////create Components
+			//auto renderComponent = CREATE_CLASS(SpriteComponent)
+			//renderComponent->m_texture = GET_RESOURCE(kiko::Texture, "Shipss.png", kiko::g_renderer);
+			//player->AddComponent(std::move(renderComponent));
 
-			//adding physics
-			auto physicsComponent = CREATE_CLASS(EnginePhysicsComponent)
-			physicsComponent->m_damping = 0.5f;
-			player->AddComponent(std::move(physicsComponent));
-			
-			///newwwww
-			auto collisionComponent = CREATE_CLASS(CircleCollisionComponent)
-			collisionComponent->m_radius = 30.0f;
-			player->AddComponent(std::move(collisionComponent));
+			////adding physics
+			//auto physicsComponent = CREATE_CLASS(EnginePhysicsComponent)
+			//physicsComponent->m_damping = 0.5f;
+			//player->AddComponent(std::move(physicsComponent));
+			//
+			/////newwwww
+			//auto collisionComponent = CREATE_CLASS(CircleCollisionComponent)
+			//collisionComponent->m_radius = 30.0f;
+			//player->AddComponent(std::move(collisionComponent));
 
-			///VVVVVVV new
+			/////VVVVVVV new
+			//player->Initialize();
+			//m_scene->Add(std::move(player));
+			auto player = INSTANTIATE(Player, "Player");
+			player->transform = kiko::Transform{ { 400, 300 }, 0.5, 1 };
 			player->Initialize();
 			m_scene->Add(std::move(player));
 	}
@@ -108,20 +119,24 @@ void StarField::Update(float dt)
 			if(m_spawnTimer >= m_spawnTime)
 			{
 				m_spawnTimer = 0;
-				std::unique_ptr<kiko::Enemy> enemy = std::make_unique<kiko::Enemy>(75.0f, kiko::Pi, kiko::Transform{ { kiko::random(800), kiko::random(600) }, kiko::randomf(kiko::TwoPi), 3 });
-				enemy->tag = "Enemy";
-				enemy->m_game = this;
-				// create components
-				//---------------------------------------Put the enemy pngs instead
-				auto component = kiko::Factory::Instance().Create<kiko::SpriteComponent>("SpriteComponent");
-				component->m_texture = GET_RESOURCE(kiko::Texture, "Shipss.png", kiko::g_renderer);
-				enemy->AddComponent(std::move(component));
+				//std::unique_ptr<kiko::Enemy> enemy = std::make_unique<kiko::Enemy>(75.0f, kiko::Pi, kiko::Transform{ { kiko::random(800), kiko::random(600) }, kiko::randomf(kiko::TwoPi), 3 });
+				//enemy->tag = "Enemy";
+				//enemy->m_game = this;
+				//// create components
+				////---------------------------------------Put the enemy pngs instead
+				//auto component = kiko::Factory::Instance().Create<kiko::SpriteComponent>("SpriteComponent");
+				//component->m_texture = GET_RESOURCE(kiko::Texture, "Shipss.png", kiko::g_renderer);
+				//enemy->AddComponent(std::move(component));
 
-				///newwwww add to each enemy you have
-				auto collisionComponent = std::make_unique<kiko::CircleCollisionComponent>();
-				collisionComponent->m_radius = 30.0f;
-				enemy->AddComponent(std::move(collisionComponent));
+				////newwwww add to each enemy you have
+				//auto collisionComponent = std::make_unique<kiko::CircleCollisionComponent>();
+				//collisionComponent->m_radius = 30.0f;
+				//enemy->AddComponent(std::move(collisionComponent));
 
+				//enemy->Initialize();
+				//m_scene->Add(std::move(enemy));
+				auto enemy = INSTANTIATE(Enemy, "Enemy");
+				enemy->transform = kiko::Transform{ { 400, 300 }, 0, 1 };
 				enemy->Initialize();
 				m_scene->Add(std::move(enemy));
 			}
@@ -130,19 +145,23 @@ void StarField::Update(float dt)
 			if (m_bosspawnTr >= m_bossspawnT)
 			{
 				m_bosspawnTr = 0;
-				std::unique_ptr<kiko::Enemy> enemy = std::make_unique<kiko::Enemy>(75.0f, kiko::Pi, kiko::Transform{ { kiko::random(800), kiko::random(600) }, kiko::randomf(kiko::TwoPi), 6 });
-				enemy->tag = "EnemyB";
-				enemy->m_game = this;
-				// create components
-				//---------------------------------------Put the enemy pngs instead
-				auto component = kiko::Factory::Instance().Create<kiko::SpriteComponent>("SpriteComponent");
-				component->m_texture = GET_RESOURCE(kiko::Texture, "Shipss.png", kiko::g_renderer);
-				enemy->AddComponent(std::move(component));
+				//std::unique_ptr<kiko::Enemy> enemy = std::make_unique<kiko::Enemy>(75.0f, kiko::Pi, kiko::Transform{ { kiko::random(800), kiko::random(600) }, kiko::randomf(kiko::TwoPi), 6 });
+				//enemy->tag = "EnemyB";
+				//enemy->m_game = this;
+				//// create components
+				////---------------------------------------Put the enemy pngs instead
+				//auto component = kiko::Factory::Instance().Create<kiko::SpriteComponent>("SpriteComponent");
+				//component->m_texture = GET_RESOURCE(kiko::Texture, "Shipss.png", kiko::g_renderer);
+				//enemy->AddComponent(std::move(component));
 
-				auto collisionComponent = std::make_unique<kiko::CircleCollisionComponent>();
-				collisionComponent->m_radius = 30.0f;
-				enemy->AddComponent(std::move(collisionComponent));
+				//auto collisionComponent = std::make_unique<kiko::CircleCollisionComponent>();
+				//collisionComponent->m_radius = 30.0f;
+				//enemy->AddComponent(std::move(collisionComponent));
 
+				//enemy->Initialize();
+				//m_scene->Add(std::move(enemy));
+				auto enemy = INSTANTIATE(Enemy, "Enemy");
+				enemy->transform = kiko::Transform{ { 400, 300 }, 0, 1 };
 				enemy->Initialize();
 				m_scene->Add(std::move(enemy));
 			}
@@ -154,7 +173,7 @@ void StarField::Update(float dt)
 			if (m_spawnTimer >= m_spawnTime)
 			{
 				m_spawnTimer = 0;
-				std::unique_ptr<kiko::Enemy> enemy = std::make_unique<kiko::Enemy>(75.0f, kiko::Pi, kiko::Transform{ { kiko::random(800), kiko::random(600) }, kiko::randomf(kiko::TwoPi), 3 });
+				/*std::unique_ptr<kiko::Enemy> enemy = std::make_unique<kiko::Enemy>(75.0f, kiko::Pi, kiko::Transform{ { kiko::random(800), kiko::random(600) }, kiko::randomf(kiko::TwoPi), 3 });
 				enemy->tag = "Enemy";
 				enemy->m_game = this;
 
@@ -163,6 +182,10 @@ void StarField::Update(float dt)
 				enemy->AddComponent(std::move(collisionComponent));
 
 				enemy->Initialize();
+				m_scene->Add(std::move(enemy));*/
+				auto enemy = INSTANTIATE(Enemy, "Enemy");
+				enemy->transform = kiko::Transform{ { 400, 300 }, 0, 1 };
+				enemy->Initialize();
 				m_scene->Add(std::move(enemy));
 			}
 
@@ -170,7 +193,7 @@ void StarField::Update(float dt)
 			if (m_bosspawnTr >= m_bossspawnT)
 			{
 				m_bosspawnTr = 0;
-				std::unique_ptr<kiko::Enemy> enemy = std::make_unique<kiko::Enemy>(75.0f, kiko::Pi, kiko::Transform{ { kiko::random(800), kiko::random(600) }, kiko::randomf(kiko::TwoPi), 6 });
+				/*std::unique_ptr<kiko::Enemy> enemy = std::make_unique<kiko::Enemy>(75.0f, kiko::Pi, kiko::Transform{ { kiko::random(800), kiko::random(600) }, kiko::randomf(kiko::TwoPi), 6 });
 				enemy->tag = "EnemyB";
 				enemy->m_game = this;
 
@@ -178,6 +201,10 @@ void StarField::Update(float dt)
 				collisionComponent->m_radius = 30.0f;
 				enemy->AddComponent(std::move(collisionComponent));
 
+				enemy->Initialize();
+				m_scene->Add(std::move(enemy));*/
+				auto enemy = INSTANTIATE(Enemy, "Enemy");
+				enemy->transform = kiko::Transform{ { 400, 300 }, 0, 1 };
 				enemy->Initialize();
 				m_scene->Add(std::move(enemy));
 			}
@@ -185,7 +212,7 @@ void StarField::Update(float dt)
 			if (m_spawnTimer >= m_spawnTime)
 			{
 				m_spawnTimer = 0;
-				std::unique_ptr<kiko::Enemy> enemy = std::make_unique<kiko::Enemy>(75.0f, kiko::Pi, kiko::Transform{ { kiko::random(800), kiko::random(600) }, kiko::randomf(kiko::TwoPi), 3 });
+				/*std::unique_ptr<kiko::Enemy> enemy = std::make_unique<kiko::Enemy>(75.0f, kiko::Pi, kiko::Transform{ { kiko::random(800), kiko::random(600) }, kiko::randomf(kiko::TwoPi), 3 });
 				enemy->tag = "Enemy";
 				enemy->m_game = this;
 
@@ -194,6 +221,10 @@ void StarField::Update(float dt)
 				enemy->AddComponent(std::move(collisionComponent));
 
 				enemy->Initialize();
+				m_scene->Add(std::move(enemy));*/
+				auto enemy = INSTANTIATE(Enemy, "Enemy");
+				enemy->transform = kiko::Transform{ { 400, 300 }, 0, 1 };
+				enemy->Initialize();
 				m_scene->Add(std::move(enemy));
 			}
 
@@ -201,7 +232,7 @@ void StarField::Update(float dt)
 			if (m_bosspawnTr >= m_bossspawnT)
 			{
 				m_bosspawnTr = 0;
-				std::unique_ptr<kiko::Enemy> enemy = std::make_unique<kiko::Enemy>(75.0f, kiko::Pi, kiko::Transform{ { kiko::random(800), kiko::random(600) }, kiko::randomf(kiko::TwoPi), 6 });
+				/*std::unique_ptr<kiko::Enemy> enemy = std::make_unique<kiko::Enemy>(75.0f, kiko::Pi, kiko::Transform{ { kiko::random(800), kiko::random(600) }, kiko::randomf(kiko::TwoPi), 6 });
 				enemy->tag = "EnemyB";
 				enemy->m_game = this;
 
@@ -209,6 +240,10 @@ void StarField::Update(float dt)
 				collisionComponent->m_radius = 30.0f;
 				enemy->AddComponent(std::move(collisionComponent));
 
+				enemy->Initialize();
+				m_scene->Add(std::move(enemy));*/
+				auto enemy = INSTANTIATE(Enemy, "Enemy");
+				enemy->transform = kiko::Transform{ { 400, 300 }, 0, 1 };
 				enemy->Initialize();
 				m_scene->Add(std::move(enemy));
 			}
@@ -280,4 +315,15 @@ void StarField::Draw(kiko::Renderer& renderer)
 
 	m_scoreText->Draw(renderer, 40, 40);
 	kiko::g_particleSystem.Draw(renderer);
+}
+
+void StarField::OnAddPoints(const kiko::Event& event)
+{
+	m_score += std::get<int>(event.data);
+}
+
+void StarField::OnPlayerDead(const kiko::Event& event)
+{
+	m_lives--;
+	m_state = eState::PlayerDeadStart;
 }

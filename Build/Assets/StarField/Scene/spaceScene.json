@@ -1,0 +1,154 @@
+{
+	"actors": [
+		{
+			"type": "Actor",
+			"name": "Background",
+			"persistant": true,
+			"transform": {
+				"position": [
+					400,
+					300
+				],
+				"scale": 1.0,
+				"rotation": 0
+			},
+			"components": [
+				{
+					"type": "SpriteComponent",
+					"textureName": "textures/space.jpg"
+				}
+			]
+		},
+		{
+			"type": "Weapon",
+			"name": "Rocket",
+			"prototype": true,
+			"tag": "PlayerBullet",
+			"lifespane": 1,
+			"transform": {
+				"position": [
+					400,
+					300
+				],
+				"scale": 1.0,
+				"rotation": 0
+			},
+			"speed": 10,
+			"components": [
+				{
+					"type": "SpriteComponent",
+					"textureName": "textures/Shipss.png"
+				},
+				{
+					"type": "CircleCollisionComponent"
+				},
+				{
+					"type": "Box2DPhysicsComponent",
+					"damping": 0,
+					"angularDamping": 2,
+					"gravityScale": 0
+				},
+				{
+					"type": "Box2DCollisionComponent",
+					"size": [
+						32,
+						32
+					],
+					"isTrigger": false,
+					"constrainAngle": true
+				}
+			]
+		},
+		{
+			"type": "Actor",
+			"name": "Title",
+			"persistent": true,
+			"transform": {
+				"position": [
+					400,
+					300
+				],
+				"scale": 2,
+				"rotation": 0
+			},
+			"components": [
+				{
+					"type": "TextRenderComponent",
+					"fontName": "Fonts/QuirkyRobot.ttf",
+					"fontSize": 24,
+					"text": "STARFIELD"
+				}
+			]
+		},
+		{
+			"type": "Player",
+			"name": "Player",
+			"prototype": true,
+			"tag": "Player",
+			"transform": {
+				"position": [
+					400,
+					300
+				],
+				"scale": 1.0,
+				"rotation": 0
+			},
+			"speed": 4,
+			"turnRate": 0.5,
+			"components": [
+				{
+					"type": "SpriteComponent",
+					"textureName": "textures/Shipss.png"
+				},
+				{
+					"type": "Box2DPhysicsComponent",
+					"damping": 0.98,
+					"angularDamping": 2,
+					"gravityScale": 0
+				},
+				{
+					"type": "Box2DCollisionComponent",
+					"size": [
+						32,
+						32
+					]
+				}
+			]
+		},
+		{
+			"type": "Enemy",
+			"name": "Enemy",
+			"prototype": true,
+			"tag": "Enemy",
+			"transform": {
+				"position": [
+					400,
+					300
+				],
+				"scale": 0.3,
+				"rotation": 0
+			},
+			"speed": 2,
+			"turnRate": 0.5,
+			"components": [
+				{
+					"type": "SpriteComponent",
+					"textureName": "textures/Enemy.png"
+				},
+				{
+					"type": "Box2DPhysicsComponent",
+					"damping": 0.98,
+					"angularDamping": 2,
+					"gravityScale": 0
+				},
+				{
+					"type": "Box2DCollisionComponent",
+					"size": [
+						32,
+						32
+					]
+				}
+			]
+		}
+	]
+}

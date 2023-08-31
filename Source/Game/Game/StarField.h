@@ -1,8 +1,9 @@
 #pragma once
 #include "Framework/Game.h"
 #include "Renderer/Text.h"
+#include "Framework/Event/EventManager.h"
 
-class StarField : public kiko::Game
+class StarField : public kiko::Game, kiko::IEventListener
 {
 public:
 	enum class eState
@@ -15,7 +16,6 @@ public:
 		PlayerDead,
 		GameOverStart,
 		GameOver
-
 	};
 
 public:
@@ -27,6 +27,9 @@ public:
 
 	virtual void Update(float dt) override;
 	virtual void Draw(kiko::Renderer& renderer) override;
+	
+	void OnAddPoints(const kiko::Event& event);
+	void OnPlayerDead(const kiko::Event& event);
 
 	void SetState(eState state) { m_state = state; }
 

@@ -10,15 +10,12 @@ namespace kiko
 	{
 		Actor::Initialize();
 
+		m_physicsComponent = GetComponent<PhysicsComponent>();
+
 		auto collisionComponent = GetComponent<kiko::CollisionComponent>();
 		if (collisionComponent)
 		{
-			auto renderComponent = GetComponent<kiko::RenderComponent>();
-			if (renderComponent)
-			{
-				float scale = Actor::transform.scale;
-				collisionComponent->m_radius = renderComponent->GetRadius() * scale;
-			}
+			
 		}
 
 		return true;
@@ -29,13 +26,13 @@ namespace kiko
 		Actor::Update(dt);
 
 		kiko::vec2 forward = kiko::vec2{ 0, -1 }.Rotate(Actor::transform.rotation);
-		Actor::transform.position += forward * speed * kiko::g_time.GetDeltaTime();
+		m_physicsComponent->SetVelocity(forward * speed);
 
 		Actor::transform.position.x = kiko::Wrap(Actor::transform.position.x, (float)kiko::g_renderer.GetWidth());
 		Actor::transform.position.y = kiko::Wrap(Actor::transform.position.y, (float)kiko::g_renderer.GetHeight());
 	}
 
-	void Weapon::OnCollision(Actor* other)
+	void Weapon::OnCollisionEnter(Actor* other)
 	{
 		if (other->Actor::tag != tag)
 		{
@@ -46,5 +43,6 @@ namespace kiko
 	{
 		Actor::Read(value);
 		READ_DATA(value, speed);
+		READ_DATA(value, m_turnRate);
 	}
 }

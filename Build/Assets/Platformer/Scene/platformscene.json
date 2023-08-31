@@ -1,0 +1,373 @@
+{
+	"actors": [
+		{
+			"type": "Actor",
+			"name": "Background",
+			"persistent": true,
+			"transform": {
+				"position": [
+					540,
+					370
+				],
+				"scale": 3,
+				"rotation": 0
+			},
+			"components": [
+				{
+					"type": "SpriteComponent",
+					"textureName": "textures/field.jpg"
+				}
+			]
+		},
+		{
+			"type": "Actor",
+			"name": "Coin",
+			"tag": "coin",
+			"persistent": true,
+			"transform": {
+				"position": [
+					400,
+					100
+				],
+				"scale": 0.1,
+				"rotation": 0
+			},
+			"components": [
+				{
+					"type": "SpriteAnimRenderComponent",
+					"defaultSequenceName": "idle",
+					"sequences": [
+						{
+							"name": "idle",
+							"fps": 12,
+							"numColumns": 1,
+							"numRows": 20,
+							"startFrame": 1,
+							"endFrame": 20,
+							"textureName": "textures/balls.png"
+						}
+					]
+				},
+				{
+					"type": "Box2DPhysicsComponent",
+					"damping": 0,
+					"angularDamping": 2,
+					"gravityScale": 1
+				},
+				{
+					"type": "Box2DCollisionComponent",
+					"restitution": 1.1
+				}
+			]
+		},
+		{
+			"type": "Actor",
+			"name": "Crate",
+			"tag": "Ground",
+			"persistent": true,
+			"prototype": true,
+			"transform": {
+				"position": [
+					300,
+					300
+				],
+				"scale": 1,
+				"rotation": 0
+			},
+			"components": [
+				{
+					"type": "SpriteComponent",
+					"textureName": "textures/crate.png"
+				},
+				{
+					"type": "Box2DPhysicsComponent"
+				},
+				{
+					"type": "Box2DCollisionComponent"
+				}
+			]
+		},
+		{
+			"type": "Player",
+			"name": "Player",
+			"tag": "Player",
+			"persistent": true,
+			"speed": 50,
+			"maxSpeed": 8,
+			"jump": 10,
+			"transform": {
+				"position": [
+					600,
+					300
+				],
+				"scale": 1.5,
+				"rotation": 0
+			},
+			"components": [
+				{
+					"type": "SpriteAnimRenderComponent",
+					"defaultSequenceName": "idle",
+					"source": [ 0, 0, 12, 35 ],
+					"origin": [ 0.5, 1 ],
+					"sequences": [
+						{
+							"name": "idle",
+							"fps": 8,
+							"numColumns": 4,
+							"numRows": 4,
+							"startFrame": 1,
+							"endFrame": 4,
+							"textureName": "textures/poke.png"
+						},
+						{
+							"name": "walk",
+							"fps": 12,
+							"numColumns": 4,
+							"numRows": 4,
+							"startFrame": 9,
+							"endFrame": 12,
+							"textureName": "textures/poke.png"
+						}
+					]
+				},
+				{
+					"type": "Box2DPhysicsComponent",
+					"constrainAngle": true
+				},
+				{
+					"type": "Box2DCollisionComponent"
+				}
+			]
+		},
+		{
+			"type": "Enemy",
+			"name": "Enemy",
+			"tag": "Enemy",
+			"persistent": true,
+			"speed": 10,
+			"transform": {
+				"position": [
+					250,
+					300
+				],
+				"scale": 0.2,
+				"rotation": 0
+			},
+			"components": [
+				{
+					"type": "SpriteAnimRenderComponent",
+					"defaultSequenceName": "idleE",
+					"sequences": [
+						{
+							"name": "idleE",
+							"fps": 12,
+							"numColumns": 4,
+							"numRows": 1,
+							"startFrame": 1,
+							"endFrame": 4,
+							"textureName": "textures/Zubat2.png"
+						}
+					]
+				},
+				{
+					"type": "Box2DPhysicsComponent",
+					"constrainAngle": true,
+					"gravityScale": 0,
+					"damping": 0.01
+				},
+				{
+					"type": "Box2DCollisionComponent",
+					"restitution": 0.1,
+					"isTrigger": false
+				}
+			]
+		},
+		{
+			"type": "Enemy",
+			"name": "EnemyB",
+			"tag": "EnemyB",
+			"persistent": true,
+			"speed": 40,
+			"transform": {
+				"position": [
+					450,
+					300
+				],
+				"scale": 0.1,
+				"rotation": 0
+			},
+			"components": [
+				{
+					"type": "SpriteAnimRenderComponent",
+					"defaultSequenceName": "idleEx",
+					"sequences": [
+						{
+							"name": "idleEx",
+							"fps": 8,
+							"numColumns": 6,
+							"numRows": 4,
+							"startFrame": 4,
+							"endFrame": 6,
+							"textureName": "textures/Embor.png"
+						},
+
+						{
+							"name": "walkW",
+							"fps": 12,
+							"numColumns": 6,
+							"numRows": 4,
+							"startFrame": 16,
+							"endFrame": 18,
+							"textureName": "textures/Embor.png"
+						}
+					]
+				},
+				{
+					"type": "Box2DPhysicsComponent",
+					"constrainAngle": true,
+					"gravityScale": 1
+				},
+				{
+					"type": "Box2DCollisionComponent",
+					"restitution": 0.1,
+					"damping": 0.01,
+					"isTrigger": false
+				}
+			]
+		},
+		{
+			"type": "Enemy",
+			"name": "EnemyG",
+			"tag": "EnemyG",
+			"persistent": true,
+			"speed": 3,
+			"transform": {
+				"position": [
+					350,
+					300
+				],
+				"scale": 3,
+				"rotation": 0
+			},
+			"components": [
+				{
+					"type": "SpriteAnimRenderComponent",
+					"defaultSequenceName": "idleExx",
+					"sequences": [
+						{
+							"name": "idleExx",
+							"fps": 8,
+							"numColumns": 8,
+							"numRows": 12,
+							"startFrame": 37,
+							"endFrame": 40,
+							"textureName": "textures/piki.png"
+						},
+
+						{
+							"name": "walkWe",
+							"fps": 12,
+							"numColumns": 8,
+							"numRows": 12,
+							"startFrame": 53,
+							"endFrame": 56,
+							"textureName": "textures/piki.png"
+						}
+					]
+				},
+				{
+					"type": "Box2DPhysicsComponent",
+					"constrainAngle": true,
+					"gravityScale": 0
+				},
+				{
+					"type": "Box2DCollisionComponent",
+					"restitution": 0.1,
+					"damping": 0.01,
+					"isTrigger": false
+				}
+			]
+		},
+		{
+			"type": "Actor",
+			"name": "Title",
+			"persistent": true,
+			"transform": {
+				"position": [
+					545,
+					100
+				],
+				"scale": 1,
+				"rotation": 0
+			},
+			"components": [
+				{
+					"type": "TextRenderComponent",
+					"fontName": "Fonts/QuirkyRobot.ttf",
+					"fontSize": 48,
+					"text": "Poke Ball Soccar",
+					"color": [
+						1,
+						0,
+						0,
+						1
+					]
+				}
+			]
+		},
+		{
+			"type": "Actor",
+			"name": "ScoreL",
+			"persistent": true,
+			"transform": {
+				"position": [
+					150,
+					100
+				],
+				"scale": 1,
+				"rotation": 0
+			},
+			"components": [
+				{
+					"type": "TextRenderComponent",
+					"fontName": "Fonts/QuirkyRobot.ttf",
+					"fontSize": 48,
+					"text": "0",
+					"color": [
+						1,
+						0,
+						0,
+						1
+					]
+				}
+			]
+		},
+		{
+			"type": "Actor",
+			"name": "ScoreR",
+			"persistent": true,
+			"transform": {
+				"position": [
+					900,
+					100
+				],
+				"scale": 1,
+				"rotation": 0
+			},
+			"components": [
+				{
+					"type": "TextRenderComponent",
+					"fontName": "Fonts/QuirkyRobot.ttf",
+					"fontSize": 48,
+					"text": "0",
+					"color": [
+						1,
+						0,
+						0,
+						1
+					]
+				}
+			]
+		}
+	]
+}

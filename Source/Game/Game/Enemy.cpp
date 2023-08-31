@@ -7,9 +7,12 @@
 
 namespace kiko
 {
+	CLASS_DEFINITION(Enemy)
 	bool Enemy::Initialize()
 	{
 		Actor::Initialize();
+
+		m_physicsComponent = GetComponent<PhysicsComponent>();
 		auto collisionComponent = GetComponent<kiko::CollisionComponent>();
 		if (collisionComponent)
 		{
@@ -35,27 +38,26 @@ namespace kiko
 			kiko::Vector2 direction = player->transform.position - transform.position;
 			// turning
 			float turnAngle = kiko::vec2::SignedAngle(forward, direction.Normalized());
-			transform.rotation += turnAngle * dt; //turnAngle * 5 * dt make turn faster
+			//transform.rotation += turnAngle * dt; //turnAngle * 5 * dt make turn faster
+			m_physicsComponent->ApplyTorque(turnAngle);
 			// check to see if enemy can see you
 			if (std::fabs(turnAngle) < kiko::DegreesToRadians(30.0f))
 			{
 				// They see me
-
 				// use fire timer to tell when creating a bullet, then reset
 
-				/*if (m_fireTimer <= 0) {
+				if (m_fireTimer <= 0) {
 
-					kiko::Transform transform { transform.position, transform.rotation, 1};
-					std::unique_ptr<Weapon> weapon = std::make_unique<Weapon>(400.0f, transform);
-					weapon->tag = "EnemyBullet";
-
+					auto weapon = INSTANTIATE(Weapon, "Rocket");
+					weapon->transform = { transform.position, transform.rotation, 1.0f };
+					weapon->Initialize();
 					m_scene->Add(std::move(weapon));
 
 					m_fireTimer = m_firerate;
 				}
 				else {
 					m_fireTimer -= dt;
-				}*/
+				}
 			}
 		}
 
@@ -75,7 +77,7 @@ namespace kiko
 
 	}
 
-	void Enemy::OnCollision(Actor* other)
+	void Enemy::OnCollisionEnter(Actor* other)
 	{
 		if (tag == "Enemy")
 		{
@@ -83,7 +85,8 @@ namespace kiko
 			{
 				//m_health - m_damage;
 				//if (m_health <= 0) m_destroyed = true;
-				m_game->AddPoints(100);
+				//m_game->AddPoints(100);
+				kiko::EventManager::Instance().DispatchEvent("AddPoints", 100);
 				kiko::EmitterData data;
 				data.burst = true;
 				data.burstCount = 100;
@@ -104,5 +107,14 @@ namespace kiko
 				destroyed = true;
 			}
 		}
+	}
+
+	void Enemy::Read(const json_t& value)
+	{
+		Actor::Read(value);
+		READ_DATA(value, m_speed);
+		READ_DATA(value, m_turnRate);
+		READ_DATA(value, m_fireTimer);
+		READ_DATA(value, m_pointTimer);
 	}
 }

@@ -45,4 +45,9 @@
       <Filter>Source\Resources</Filter>
     </Text>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Build\Assets\StarField\Scene\spaceScene.json">
+      <Filter>Source\Resources</Filter>
+    </None>
+  </ItemGroup>
 </Project>

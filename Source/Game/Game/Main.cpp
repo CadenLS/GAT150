@@ -23,6 +23,7 @@
 #include <cassert>
 #include <array>
 #include <map>
+#include <functional>
 
 using namespace std;
 
@@ -50,10 +51,9 @@ int main(int argc, char* argv[])
 	INFO_LOG("Initialize Engine...");
 
 	kiko::MemoryTracker::Initialize();
-
 	bool quit = false;
 	kiko::seedRandom((unsigned int)time(nullptr));
-	kiko::setFilePath("Assets");
+	kiko::setFilePath("StarField/Assets");
 
 
 	kiko::Renderer renderer;
@@ -110,6 +110,7 @@ int main(int argc, char* argv[])
 		// game update
 		game->Update(kiko::g_time.GetDeltaTime());
 		kiko::g_audioSystem.PlayOneShot("Sound", true);
+		kiko::PhysicsSystem::Instance().Update(kiko::g_time.GetDeltaTime());
 
 		game->Draw(kiko::g_renderer);
 

@@ -179,6 +179,9 @@
   <ItemGroup>
     <Text Include="..\..\..\Build\Assets\scene.json" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Build\Assets\StarField\Scene\spaceScene.json" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

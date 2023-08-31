@@ -8,6 +8,8 @@
 
 namespace kiko
 {
+	CLASS_DEFINITION(Player)
+
 	bool Player::Initialize()
 	{
 		Actor::Initialize();
@@ -34,13 +36,13 @@ namespace kiko
 		float rotate = 0;
 		if (kiko::g_inputSystem.GetKeyDown(SDL_SCANCODE_A)) rotate = -1;
 		if (kiko::g_inputSystem.GetKeyDown(SDL_SCANCODE_D)) rotate = 1;
-		transform.rotation += rotate * m_turnrate * kiko::g_time.GetDeltaTime();
+		//transform.rotation += rotate * m_turnrate * kiko::g_time.GetDeltaTime();
+		m_physicsComponent->ApplyTorque(rotate * m_turnrate);
 
 		float thrust = 0;
 		if (kiko::g_inputSystem.GetKeyDown(SDL_SCANCODE_W)) thrust = 1;
 		kiko::vec2 forward = kiko::vec2{ 0, -1 }.Rotate(transform.rotation);
 
-		///VVVVV
 		m_physicsComponent->ApplyForce(forward * m_speed * thrust);
 
 		transform.position.x = kiko::Wrap(transform.position.x, (float)kiko::g_renderer.GetWidth());
@@ -199,14 +201,14 @@ namespace kiko
 		else kiko::g_time.SetTimeScale(1.0f);
 	}
 
-	void Player::OnCollision(Actor* other)
+	void Player::OnCollisionEnter(Actor* other)
 	{
 		if (other->tag == "EnemyBullet")
 		{
-			m_game->SetLives(m_game->GetLives() - 1);
-			dynamic_cast<StarField*>(m_game)->SetState(StarField::eState::PlayerDeadStart);
-			//m_health - m_damage;
-			//if (m_health <= 0) m_destroyed = true;
+			//m_game->SetLives(m_game->GetLives() - 1);
+			//dynamic_cast<StarField*>(m_game)->SetState(StarField::eState::PlayerDeadStart);
+			kiko::EventManager::Instance().DispatchEvent("OnPlayerDead", 0);
+
 			destroyed = true;
 		}
 
@@ -216,5 +218,18 @@ namespace kiko
 			dynamic_cast<StarField*>(m_game)->SetState(StarField::eState::PlayerDeadStart);
 			destroyed = true;
 		}
+	}
+
+	void Player::Read(const json_t& value)
+	{
+		Actor::Read(value);
+		//READ_DATA(value, m_speed);
+		//READ_DATA(value, m_turnrate);
+		READ_NAME_DATA(value, "speed", m_speed);
+		READ_NAME_DATA(value, "turnRate", m_turnrate);
+		READ_DATA(value, m_singleTimer);
+		READ_DATA(value, m_doubleTimer);
+		READ_DATA(value, m_shotgunTimer);
+		READ_DATA(value, m_lazerTimer);
 	}
 }

@@ -15,7 +15,7 @@ namespace kiko
 		virtual bool Create(std::string filename, ...) override;
 
 		bool Load(const std::string filename, class Renderer& renderer);
-		vec2 GetSize();
+		vec2 GetSize() const;
 
 		SDL_Texture* GetTexture() const { return m_texture; }
 

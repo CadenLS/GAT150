@@ -1,23 +1,37 @@
 #pragma once
 #include "RenderComponent.h"
-#include "Renderer/Texture.h"
 #include "Framework/Factory.h"
+
+#include "Renderer/Texture.h"
 
 namespace kiko
 {
-	class SpriteComponent : public RenderComponent
-	{
-	public:
-		CLASS_DECLARATION(SpriteComponent)
+    // Declaration of the SpriteComponent class
+    class SpriteComponent : public RenderComponent
+    {
+    public:
+        // Macro to declare the class as a SpriteComponent
+        CLASS_DECLARATION(SpriteComponent)
 
-		bool Initialize() override;
-		void Update(float dt) override;
-		void Draw(class Renderer& renderer) override;
+        // Initialize the sprite component
+        bool Initialize() override;
 
-		virtual float GetRadius() { return m_texture->GetSize().Length() * 0.5f; }
+        // Update function for sprite component
+        void Update(float dt);
 
-	public:
-		std::string textureName;
-		res_t<Texture> m_texture;
-	};
+        // Draw function for sprite rendering
+        void Draw(class Renderer& renderer);
+    public:
+
+        // Data member for the rectangle defining the source of the sprite
+        Rect source;
+        bool flipH = false;
+        vec2 origin{ 0.5f, 0.5f };
+
+        // Name of the texture used by the sprite
+        std::string textureName;
+
+        // Resource handle for the texture
+        res_t<Texture> m_texture;  // member variable for texture
+    };
 }
